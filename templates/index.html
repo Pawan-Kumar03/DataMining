@@ -99,13 +99,13 @@
     <h1>Data Mining</h1>
     <form method="POST" action="/">
         <label for="zipcode">Enter Postcode:</label>
-        <input type="text" id="zipcode" name="zipcode" required>
+        <input type="text" id="zipcode" name="zipcode" placeholder="Enter Zip Code" required>
         <button type="submit"id="start-scraping-btn" onclick="scrapping_started()">Start Scraping</button>
     </form>
-    <form method="POST" action="/download">
-        <input type="hidden" name="zipcode" value="{{ zipcode }}">
-        <button type="submit">Download Data</button>
-    </form>    
+    <form action="/download" method="POST">
+        <input type="text" name="zipcode" placeholder="Enter ZIP Code">
+        <button type="submit">Download File</button>
+      </form>              
     <h2>Overdue Accounts</h2>
     <table>
         <tr>
