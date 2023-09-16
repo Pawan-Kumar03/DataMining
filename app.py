@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 from bs4 import BeautifulSoup
 import pandas as pd
-import json
+import os
 
 app = Flask(__name__)
 loop = asyncio.get_event_loop()
@@ -63,8 +63,11 @@ async def scrape_data(zipcode):
                                                             AccountStatus = soup.find("div", id="content-container").find("div",
                                                                                                                           class_="govuk-tabs").find(
                                                                 "div", class_="govuk-tabs__panel").find_all("div", class_="grid-row")
-                                                            AccountOverdue = AccountStatus[2].find("div", class_="column-half").find(
+                                                            try:
+                                                                AccountOverdue = AccountStatus[2].find("div", class_="column-half").find(
                                                                 "h2").get_text()
+                                                            except IndexError:
+                                                                continue
                                                         else:
                                                             AccountStatus = soup.find("div", id="content-container").find("div",
                                                                                                                           class_="govuk-tabs").find(
@@ -111,7 +114,10 @@ def get_overdue_accounts(data):
 def download():
     zipcode = request.form['zipcode']
     filename = f"{zipcode}.xlsx"
-    return send_file(filename, as_attachment=True)
+    if os.path.exists(filename):
+        return send_file(filename, as_attachment=True)
+    else:
+        return "File Not Found."
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
